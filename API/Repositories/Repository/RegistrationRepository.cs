@@ -60,7 +60,7 @@ namespace API.Repositories.Repository
         private async Task SendOtpViaEmail(string Email, int Otp)
         {
             string smtpServer = "smtp.rediffmailpro.com";
-            int smtpPort = 465;
+            int smtpPort = 587;//465
             string smtpUsername = "kasim@bigshareonline.com";
             string smtpPassword = "Bigpower@321";
 
@@ -71,7 +71,7 @@ namespace API.Repositories.Repository
             {
                 using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                 {
-                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.UseDefaultCredentials = true;
                     smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
                     smtpClient.EnableSsl = true;
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -79,7 +79,7 @@ namespace API.Repositories.Repository
                     using (MailMessage mailMessage = new MailMessage(senderEmail, recipientEmail))
                     {
                         mailMessage.Subject = "Your OTP Code";
-                        mailMessage.Body = $"Your Verification code is: {Otp}" + " -Bigshare Services";
+                        mailMessage.Body = $"Your Verification code is: {Otp} -Bigshare Services";
 
                         await smtpClient.SendMailAsync(mailMessage);
                     }
@@ -91,9 +91,6 @@ namespace API.Repositories.Repository
                 // Handle exceptions or log errors
             }
         }
-
-
-
 
         private async Task SendOtpViaSMS(string Mobile, int Otp)
         {

@@ -1,3 +1,8 @@
+using API.Data;
+using API.Repositories.IRepository;
+using API.Repositories.Repository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(opt =>
@@ -6,7 +11,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 });
 
 
-builder.Service.AddMvc();
+builder.Services.AddMvc();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -30,7 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(); // Use the default CORS policy defined above
+app.UseCors("AllowAny"); // Use the default CORS policy defined above
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
