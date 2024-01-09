@@ -8,6 +8,7 @@ using System.Web;
 using API.Data;
 using API.Models;
 using API.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -143,6 +144,29 @@ namespace API.Repositories.Repository
             {
                 // Handle exceptions or log errors
                 Console.WriteLine($"Error sending SMS: {ex.Message}");
+                return false;
+            }
+        }
+        public async Task<bool> VerifyOtp(int otp)
+        {
+            try
+            {
+                var generateOtp = await _context.GenerateOtp
+                    .FirstOrDefaultAsync(o => o.Otp == otp && o.Status == "Pending");
+
+                if (generateOtp != null)
+                {
+                    generateOtp.Status = "Verified";
+                    await _context.SaveChangesAsync();
+
+                    return true; 
+                }
+
+                return false; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error verifying OTP: {ex.Message}");
                 return false;
             }
         }

@@ -9,5 +9,6 @@ namespace API.Repositories.IRepository
     public interface IRegistrationRepository
     {
         Task GenerateOtpAndSave(Login user);
+        Task<bool> VerifyOtp(int otp);
     }
 }

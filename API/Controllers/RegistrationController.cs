@@ -24,16 +24,34 @@ namespace API.Controllers
         {
             try
             {
-                // Validate user input here if needed
-
-                // Call the repository method to generate OTP
                 await _registrationRepository.GenerateOtpAndSave(user);
 
                 return Ok(new { Message = "OTP generated successfully." });
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it appropriately
+                return StatusCode(500, new { Error = "Internal Server Error", Details = ex.Message });
+            }
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] int Otp)
+        {            
+            try
+            {
+                var isOtpValid = await _registrationRepository.VerifyOtp(Otp);
+
+                if (isOtpValid)
+                {
+                    return Ok(new { Message = "OTP verification successful." });
+                }
+                else
+                {
+                    return BadRequest(new { Error = "Invalid OTP." });
+                }
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, new { Error = "Internal Server Error", Details = ex.Message });
             }
         }
