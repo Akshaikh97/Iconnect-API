@@ -147,22 +147,22 @@ namespace API.Repositories.Repository
                 return false;
             }
         }
-        public async Task<bool> VerifyOtp(int otp)
+        public async Task<bool> VerifyOtp(GenerateOtp otpModel)
         {
             try
             {
                 var generateOtp = await _context.GenerateOtp
-                    .FirstOrDefaultAsync(o => o.Otp == otp && o.Status == "Pending");
+                    .FirstOrDefaultAsync(o => o.Otp == otpModel.Otp && o.Status == "Pending");
 
                 if (generateOtp != null)
                 {
                     generateOtp.Status = "Verified";
                     await _context.SaveChangesAsync();
 
-                    return true; 
+                    return true;
                 }
 
-                return false; 
+                return false;
             }
             catch (Exception ex)
             {

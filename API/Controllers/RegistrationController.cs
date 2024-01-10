@@ -35,11 +35,11 @@ namespace API.Controllers
         }
 
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> VerifyOtp([FromBody] int Otp)
+        public async Task<IActionResult> VerifyOtp([FromBody] GenerateOtp otpModel)
         {            
             try
             {
-                var isOtpValid = await _registrationRepository.VerifyOtp(Otp);
+                var isOtpValid = await _registrationRepository.VerifyOtp(otpModel);
 
                 if (isOtpValid)
                 {
